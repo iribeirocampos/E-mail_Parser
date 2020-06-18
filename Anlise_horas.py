@@ -6,16 +6,18 @@ df_results = pd.DataFrame()  # Cria a tabela df_results
 
 df_results._reindex_columns = ["Data", "Semana", "Trabalhadas", "Extra"]
 # cria colunas da tabela results a ser construida com os dados iniciais
-print(data)
 data["Data"] = data.Data.str.split(".", expand=True)
 data[["Data", "Hora"]] = data.Data.str.split(" ", expand=True)  # Separa a data da hora
-
 data["Data"] = pd.to_datetime(data["Data"], format="%Y-%m-%d")
 # Converte string em data
-print(data["Hora"])
 data["Hora"] = pd.to_timedelta(data["Hora"])
 # converte string em hora
 
+inicio_dia = datetime.timedelta(hours=8)
+filt_hora = data["Hora"] >= inicio_dia
+data = data[filt_hora]
+print(data)
+# elimina todas as horas entre as 24 e 8 da manhã
 
 df_results["Data"] = data["Data"].drop_duplicates()
 # Cria coluna na df_results de cada dia que existe na "data"
@@ -49,31 +51,29 @@ df_results["Trabalhadas"] = df_results["Hora_Final"] - df_results["Hora_Inicial"
 df_results.insert(5, column="Num_Mails", value=numero_mails, allow_duplicates=False)
 # Insere a coluna com o numero de e-maisl enviados no dia
 
-MAILS_ENV = df_results["Num_Mails"].sum()
-
+df_results.to_excel("Teste.xlsx")
 filt_sab = df_results["Semana"] == 5
 filt_dom = df_results["Semana"] == 6
 
 df_results_fds = df_results.loc[filt_sab | filt_dom]
-
+# df_results_fds = df_results_fds.reset_index
 
 df_results = df_results.loc[~filt_sab | ~filt_dom]
 
-filt = df_results["Trabalhadas"] >= jornada
+filt = df_results["Trabalhadas"] > jornada
 df_results = df_results.loc[filt]
 # elimina todos os dias com menos de 8 horas
 df_results["Extra"] = df_results["Trabalhadas"] - jornada
 # Contabiliza as horas para além das 8 normais do dia
 
 
-filt_fds = df_results["Trabalhadas"] >= jornada_fds
-df_results_fds = df_results_fds.loc[filt_fds]
-# elimina todos os dias com menos de 8 horas
+filt_fds = df_results_fds["Trabalhadas"] > jornada_fds
+df_results_fds = df_results_fds[filt_fds]
+# elimina todos os dias com menos de 4 horas
 df_results_fds["Extra"] = df_results_fds["Trabalhadas"] - jornada_fds
-# Contabiliza as horas para além das 8 normais do dia
+# Contabiliza as horas para além das 4 normais da meia folga
 
-HORAS_EXTRA = df_results["Extra"].sum() + df_results_fds["Extra"].sum()
-
+df_final = df_results.append(df_results_fds)
 print(df_results)
 print(df_results_fds)
-print(HORAS_EXTRA)
+df_final.to_excel("Resultados.xlsx")
