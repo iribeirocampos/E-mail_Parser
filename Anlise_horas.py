@@ -1,5 +1,8 @@
 import pandas as pd
 import datetime
+import numpy as np
+
+VALOR_HORA = ""
 
 data = pd.read_csv("Enviados.csv", ";")  # Dados extraidos da caixa de correio
 df_data = pd.DataFrame()  # Cria a tabela df_data
@@ -77,6 +80,43 @@ df_results_fds["Extra"] = df_results_fds["Trabalhadas"] - jornada_fds
 
 df_final = df_results_sem.append(df_results_fds)
 
+df_final.insert(0, column="Dia", value=df_final["Data"].dt.day, allow_duplicates=False)
+df_final.insert(
+    0, column="Mês", value=df_final["Data"].dt.month, allow_duplicates=False
+)
+df_final.insert(0, column="Ano", value=df_final["Data"].dt.year, allow_duplicates=False)
+# df_final = df_final.drop(["Data"], axis=1)
 
-df_final.to_excel("Resultados.xlsx")
-df_data.to_excel("Resultados2.xlsx")
+
+table = pd.pivot_table(
+    df_final,
+    values="Extra",
+    index=["Ano", "Mês"],
+    columns=["Semana"],
+    aggfunc=(np.sum),
+    fill_value="0",
+)
+table["Total"] = table.sum(axis=1) / np.timedelta64(1, "h")
+table["Total"] = table["Total"].round(decimals=2)
+table = table.rename(
+    columns={
+        0: "Segundas",
+        1: "Terças",
+        2: "Quartas",
+        3: "Quintas",
+        4: "Sextas",
+        5: "Sabados",
+        6: "Domingos",
+    }
+)
+print(table)
+
+print(
+    f"No total foram trabalhadas {table['Total'].sum().round(decimals=2)} horas além das 8 diarias."
+)
+# print(df_final)
+
+# df_final.to_excel("Resultados.xlsx")
+# df_data.to_excel("Resultados2.xlsx")
+# Ver to excel no mesmo ficheiro, sheets diferentes
+
