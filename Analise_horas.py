@@ -109,14 +109,16 @@ table = table.rename(
         6: "Domingos",
     }
 )
-print(table)
-
 print(
     f"No total foram trabalhadas {table['Total'].sum().round(decimals=2)} horas além das 8 diarias."
 )
-# print(df_final)
+writer = pd.ExcelWriter("Resultados.xlsx", engine="xlsxwriter")
 
-# df_final.to_excel("Resultados.xlsx")
-# df_data.to_excel("Resultados2.xlsx")
-# Ver to excel no mesmo ficheiro, sheets diferentes
+# store your dataframes in a  dict, where the key is the sheet name you want
+frames = {"Dados_Finais": table, "Dados": df_data}
+
+for sheet, frame in frames.items():  # .use .items for python 3.X
+    frame.to_excel(writer, sheet_name=sheet)
+
+writer.save()
 
