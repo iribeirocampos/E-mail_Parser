@@ -1,2 +1,3 @@
-IMAPClient==2.1.0
-python-dotenv==0.13.0
+pywin32==228
+unicodecsv==0.14.1
+pandas==1.0.5
