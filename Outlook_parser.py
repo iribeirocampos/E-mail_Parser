@@ -12,12 +12,14 @@ outbox = outlook.GetDefaultFolder(5)
 messages = outbox.Items
 output_writer.writerow(["Data"])
 for message in messages:
-    # sender = message.SenderName
-    # sender_address = message.sender.address
-    # sent_to = message.To
-    date = str(message.LastModificationTime)
-    # subject = message.subject
-    print(date)
-    output_writer.writerow([date])
-
+    try:
+        # sender = message.SenderName
+        # sender_address = message.sender.address
+        # sent_to = message.To
+        date = str(message.LastModificationTime)
+        # subject = message.subject
+        print(date)
+        output_writer.writerow([date])
+    except Exception:
+        pass
 output_file.close()
