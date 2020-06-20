@@ -2,7 +2,7 @@ import win32com.client
 import unicodecsv as csv
 import Analise_horas
 
-output_file = open("Enviados.csv", "wb")
+output_file = open("sent_emails.csv", "wb")
 output_writer = csv.writer(output_file, delimiter=";", encoding="latin2")
 
 outlook = win32com.client.Dispatch("Outlook.Application").GetNamespace("MAPI")
@@ -11,7 +11,7 @@ outbox = outlook.GetDefaultFolder(5)
 # "5" refers to the index of a folder - in this case,the outbox.
 
 messages = outbox.Items
-output_writer.writerow(["Data"])
+output_writer.writerow(["Date"])
 for message in messages:
     try:
         # sender = message.SenderName
