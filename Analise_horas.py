@@ -10,10 +10,21 @@ df_data = pd.DataFrame()  # Cria a tabela df_data
 df_data._reindex_columns = ["Data", "Semana", "Trabalhadas", "Extra"]
 # cria colunas da tabela results a ser construida com os dados iniciais
 data["Data"] = data.Data.str.split(".", expand=True)
+data["Data"] = data.Data.str.split("+", expand=True)
 data[["Data", "Hora"]] = data.Data.str.split(" ", expand=True)  # Separa a data da hora
 data["Data"] = pd.to_datetime(data["Data"], format="%Y-%m-%d")
 # Converte string em data
-data["Hora"] = pd.to_timedelta(data["Hora"])
+
+
+def make_timedelta(time):
+    print(time)
+    hour, minute, seconds = time.split(":")
+    hour, minute, seconds = int(hour), int(minute), int(seconds)
+    hora = datetime.timedelta(hours=hour, minutes=minute, seconds=seconds)
+    return hora
+
+
+data["Hora"] = data["Hora"].apply(make_timedelta)
 # converte string em hora
 
 inicio_dia = datetime.timedelta(hours=8)
