@@ -8,7 +8,7 @@ Install the required packages:
 pip3 install -r requirements.txt
 ```
 #### Outlook
-You need to disable cached exchange mode in order to get all e-mais from server. You can see how in https://support.microsoft.com/
+You need to disable cached exchange mode in order to get all e-mais from server. You can see how in https://support.microsoft.com/en-us/office/turn-on-cached-exchange-mode-7885af08-9a60-4ec3-850a-e221c1ed0c1c?ui=en-us&rs=en-us&ad=us.
 
 ## Deployment
 
