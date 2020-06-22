@@ -1,6 +1,6 @@
 import win32com.client
 import unicodecsv as csv
-import Analise_horas
+import data_analize
 
 output_file = open("sent_emails.csv", "wb")
 output_writer = csv.writer(output_file, delimiter=";", encoding="latin2")
@@ -25,4 +25,4 @@ for message in messages:
         pass
 output_file.close()
 
-Analise_horas.data_anal()
+data_analize.data_anal()
