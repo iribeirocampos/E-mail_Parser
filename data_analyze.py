@@ -5,7 +5,7 @@ import numpy as np
 
 WORKDAY = datetime.timedelta(hours=9, minutes=0, seconds=0)
 # 8 hours of work +1 lunch time
-WORKDAY_WEEKAND = datetime.timedelta(hours=4)
+WORKDAY_WEEKEND = datetime.timedelta(hours=4)
 # 4 hours of work on weekend
 
 
@@ -52,13 +52,13 @@ def data_anal():
         final.append(hour.max())
         number_mails.append(len(hour))
 
-    df_data.insert(2, column="Last_mail", value=final, allow_duplicates=False)
+    df_data.insert(2, column="Last_mail", value=final)
     # Column with hour of last sent e-mail
-    df_data.insert(2, column="First_mail", value=inicial, allow_duplicates=False)
+    df_data.insert(2, column="First_mail", value=inicial)
     # Column with first sent e-mail
     df_data["Worked_hours"] = df_data["Last_mail"] - df_data["First_mail"]
     # Column with worked hours
-    df_data.insert(5, column="Num_Mails", value=number_mails, allow_duplicates=False)
+    df_data.insert(5, column="Num_Mails", value=number_mails)
     # Column with the number of mails sent
 
     filt_sat = df_data["Week_day"] == 5
@@ -66,16 +66,16 @@ def data_anal():
 
     df_results_fds = df_data.loc[filt_sat | filt_sun]
 
-    df_results_sem = df_data.loc[~filt_sat | ~filt_sun]
+    df_results_sem = df_data.loc[~filt_sat & ~filt_sun]
 
     filt = df_results_sem["Worked_hours"] > WORKDAY
     df_results_sem = df_results_sem.loc[filt]
 
     df_results_sem["Overtime"] = df_results_sem["Worked_hours"] - WORKDAY
 
-    filt_fds = df_results_fds["Worked_hours"] > WORKDAY_WEEKAND
+    filt_fds = df_results_fds["Worked_hours"] > WORKDAY_WEEKEND
     df_results_fds = df_results_fds[filt_fds]
-    df_results_fds["Overtime"] = df_results_fds["Worked_hours"] - WORKDAY_WEEKAND
+    df_results_fds["Overtime"] = df_results_fds["Worked_hours"] - WORKDAY_WEEKEND
 
     df_final = df_results_sem.append(df_results_fds)
 
