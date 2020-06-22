@@ -22,7 +22,7 @@ for message in messages:
         print(date)
         output_writer.writerow([date])
     except Exception:
-        pass
+        print("Date not aquired.")
 output_file.close()
 
 data_analize.data_anal()
