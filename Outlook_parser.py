@@ -13,7 +13,7 @@ class OutlookFolder(Enum):
 
 
 outlook = win32com.client.Dispatch("Outlook.Application").GetNamespace("MAPI")
-outbox = outlook.GetDefaultFolder(OutlookFolder.OUTBOX.values)
+outbox = outlook.GetDefaultFolder(OutlookFolder.OUTBOX.value)
 
 messages = outbox.Items
 output_writer.writerow(["Date"])
