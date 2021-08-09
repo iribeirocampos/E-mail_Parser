@@ -1,4 +1,4 @@
-pywin32==228
+pywin32==301
 unicodecsv==0.14.1
 pandas==1.0.5
 XlsxWriter==1.2.9
